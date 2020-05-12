@@ -1,89 +1,118 @@
-HANGMANPICS = ['''
-    +---+
-  |   |
-      |
-      |
-      |
-      |
- =========''', '''
-    +---+
-   |   |
-   O   |
+import random
+
+def display_hangman(tries):
+    stages = ['''
+     +---+
+    |  |
        |
        |
        |
- =========''', '''
- 
+       |
+  =========''','''
     +---+
-    |   |
-    O   |
-    |   |
-        |
-        |
-  =========''', '''
-  
-    +---+
-    |   |
-    O   |
-   /|   |
-        |
-        |
-  =========''', '''
-  
-    +---+
-    |   |
-    O   |
-   /|\  |
-        |
-        |
-  =========''', '''
- 
+    |  |
+    0  |
+       |
+       |
+       |
+  =========''','''
    +---+
-   |   |
-   O   |
-  /|\  |
-  /    |
+    |  |
+    0  |
+    |  |
        |
-  =========''', '''
-  
+       |
+  =========''','''
+   +---+
+    |  |
+    0  |
+   /|  |
+       |
+       |
+  =========''','''
     +---+
-   |   |
-   O   |
-  /|\  |
-  / \  |
+    |  |
+    0  |
+   /|\ |
+       |
+       |
+  =========''','''
+   +---+
+    |  |
+    0  |
+   /|\ |
+   /   |
+       |
+  =========''','''
+    +---+
+    |  |
+    0  |
+   /|\ |
+   / \ |
        |
   =========''']
+    return stages[tries]
 
-def hangman():
-    i = 0
-    incorrectguess = 0
-    correctguess = 0
-    whateveriwant = ["person","eliphant","brother","myself"]
-    for x in whateveriwant:
-        print("Let's play Hangman! There are", len(x), "letters in this word.")
-        while i < (7 + len(x)):
-            y = input("Guess a letter in a mystery word!")
-            i += 1
-            print("Your guess is", y, "!")
-            if y in x:
-                print("Correct")
-                correctguess += 1
-                print("correctguess=", correctguess)
-                if correctguess == len(x):
-                    break
-                else:
-                    continue
+def get_word():
+    word_list=["summer","loss","pig","hook","plantation","winter","protest","milk","lake","friend","time","woman"] 
+    word=random.choice(word_list)
+    return word.upper()
+
+def play(word):
+    word_completion = "-" * len(word)
+    guessed=False
+    guessed_letters=[]
+    guessed_words = []
+    tries=6
+    print("Let's play Hangman!")
+    print(display_hangman(tries))
+    print(word_completion)
+    print("\n")
+    while not guessed and tries > 0:
+        guess = input("Please guess a letter or a word: ").upper()
+        if len(guess) == 1 and guess.isalpha():
+            if guess in guessed_letters:
+                print("you already guessed the letter", guess)
+            elif guess not in word:
+                print(guess, "is not in the word")
+                tries -=1
+                guessed_letters.append(guess)
             else:
-                print("Incorrect")
-                print(HANGMANPICS[incorrectguess])
-                incorrectguess += 1    
-        print("The correct word is", x)
-        print("GAME OVER")
-        z = input("Do you want to play again? Type yes or no.")
-        if z == "yes":
-            i = 0
-            incorrectguess = 0
-            correctguess = 0
-            continue
+                print("Good job", guess,"is in the word!")
+                guessed_letters.append(guess)
+                word_as_list = list(word_completion)
+                indices=[i for i, letter in enumerate(word) if letter == guess]
+                for index in indices:
+                    word_as_list[index] = guess
+                word_completion = "".join(word_as_list)
+                if "-" not in word_completion:
+                    guessed = True
+        elif len(guess) == len(word) and guess.isalpha():
+            if guess in guessed_words:
+                print("You already guessed the word", guess)
+            elif guess != word:
+                print(guess, "is not the word.")
+                tries -= 1
+                guessed_words.append(guess)
+            else:
+                guessed = True
+                word_completion = word
         else:
-            break
+            print("Not a valid guess.")
+        print(display_hangman(tries))
+        print(word_completion)
+        print("\n")
+    if guessed:
+        print("Congrats, you guessed the word! You win!")
+    else:
+        print("Sorry, you ran out of tries. The word was " + word + ". Maybe next time!")
+    
+def main():
+    word = get_word()
+    play(word)
+    while input("Play Again? (Y/N) ").upper() == "Y":
+        word = get_word()
+        play(word)
+    
+if __name__ == "__main__":
+    main()
