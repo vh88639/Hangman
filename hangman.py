@@ -1,40 +1,13 @@
-import random
+import random 
+from words import word_list
 
 def display_hangman(tries):
     stages = ['''
-     +---+
-    |  |
-       |
-       |
-       |
-       |
-  =========''','''
-    +---+
-    |  |
-    0  |
-       |
-       |
-       |
-  =========''','''
-   +---+
-    |  |
-    0  |
-    |  |
-       |
-       |
-  =========''','''
-   +---+
-    |  |
-    0  |
-   /|  |
-       |
-       |
-  =========''','''
     +---+
     |  |
     0  |
    /|\ |
-       |
+   / \ |
        |
   =========''','''
    +---+
@@ -48,13 +21,40 @@ def display_hangman(tries):
     |  |
     0  |
    /|\ |
-   / \ |
+       |
+       |
+  =========''','''
+   +---+
+    |  |
+    0  |
+   /|  |
+       |
+       |
+  =========''','''
+   +---+
+    |  |
+    0  |
+    |  |
+       |
+       |
+  =========''','''
+    +---+
+    |  |
+    0  |
+       |
+       |
+       |
+  =========''','''
+     +---+
+    |  |
+       |
+       |
+       |
        |
   =========''']
     return stages[tries]
 
 def get_word():
-    word_list=["summer","loss","pig","hook","plantation","winter","protest","milk","lake","friend","time","woman"] 
     word=random.choice(word_list)
     return word.upper()
 
@@ -99,9 +99,9 @@ def play(word):
                 word_completion = word
         else:
             print("Not a valid guess.")
-        print(display_hangman(tries))
-        print(word_completion)
-        print("\n")
+            print(display_hangman(tries))
+            print(word_completion)
+            print("\n")
     if guessed:
         print("Congrats, you guessed the word! You win!")
     else:
